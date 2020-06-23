@@ -1950,7 +1950,7 @@ fragment someFragment on User {
 
 ### @stream
 ```graphql
-directive @stream(label: String!, initial_count: Int!, if: Boolean) on FIELD
+directive @stream(label: String!, initialCount: Int!, if: Boolean) on FIELD
 ```
 The `@stream` directive may be provided for a field of `List` type so that the 
 backend can leverage technology such asynchronous iterators to provide a partial
@@ -1960,7 +1960,7 @@ list in the initial response, and additional list items in subsequent responses.
 query myQuery($shouldDefer: Boolean) {
    user {
      friends(first: 10) {
-       nodes @stream(label: "friendsStream", initial_count: 5)
+       nodes @stream(label: "friendsStream", initialCount: 5)
      }
    }
 }

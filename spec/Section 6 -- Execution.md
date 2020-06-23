@@ -607,7 +607,7 @@ ExecuteField(objectType, objectValue, fieldType, fields, variableValues, subsequ
   * Let {fieldName} be the field name of {field}.
   * Let {argumentValues} be the result of {CoerceArgumentValues(objectType, field, variableValues)}
   * If {field} provides the directive `@stream`, let {streamDirective} be that directive.
-    * Let {initialCount} be the value or variable provided to {streamDirective}'s {initial_count} argument.
+    * Let {initialCount} be the value or variable provided to {streamDirective}'s {initialCount} argument.
     * Let {resolvedValue} be {ResolvedFieldGenerator(objectType, objectValue, fieldName, argumentValues, initialCount)}.
     * Let {result} be the result of calling {CompleteValue(fieldType, fields, resolvedValue, variableValues, subsequentPayloads, parentPath)}.
     * Append {fieldName} to the {path} field of every {subsequentPayloads}.
@@ -721,7 +721,7 @@ to the expected return type. If the return type is another Object type, then
 the field execution process continues recursively. In the case where a value
 returned for a list type field is an iterator due to `@stream` specified on the 
 field, value completition iterates over the iterator until the number of items
-yield by the iterator satisfies `initial_count` specified on the `@stream` directive.
+yield by the iterator satisfies `initialCount` specified on the `@stream` directive.
 Unresolved items in the iterator will be stored in a stream record which the executor
 resumes to execute after the initial execution finishes.
 
@@ -769,7 +769,7 @@ CompleteValue(fieldType, fields, result, variableValues, subsequentPayloads, par
       * Let {field} be thte first entry in {fields}.
       * Let {innerType} be the inner type of {fieldType}.
       * Let {streamDirective} be the `@stream` directived provided on {field}.
-      * Let {initialCount} be the value or variable provided to {streamDirective}'s {initial_count} argument.
+      * Let {initialCount} be the value or variable provided to {streamDirective}'s {initialCount} argument.
       * Let {label} be the value or variable provided to {streamDirective}'s {label} argument.
       * Let {resolvedItems} be an empty list
       * For each {members} in {result}:
