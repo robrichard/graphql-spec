@@ -411,6 +411,7 @@ FieldsInSetCanMerge(set):
     {set} including visiting fragments and inline fragments.
   * Given each pair of members {fieldA} and {fieldB} in {fieldsForName}:
     * {SameResponseShape(fieldA, fieldB)} must be true.
+    * {SameStreamDirective(fieldA, fieldB)} must be true.
     * If the parent types of {fieldA} and {fieldB} are equal or if either is not
       an Object Type:
       * {fieldA} and {fieldB} must have identical field names.
@@ -443,6 +444,16 @@ SameResponseShape(fieldA, fieldB):
   * Given each pair of members {subfieldA} and {subfieldB} in {fieldsForName}:
     * If {SameResponseShape(subfieldA, subfieldB)} is false, return false.
   * Return true.
+
+SameStreamDirective(fieldA, fieldB):
+
+  * If neither {fieldA} nor {fieldB} has a directive named `stream`.
+    * Return true.
+  * If both {fieldA} and {fieldB} have a directive named `stream`.
+    * Let {streamA} be the directive named `stream` on {fieldA}.
+    * Let {streamB} be the directive named `stream` on {fieldB}.
+    * If {streamA} and {streamB} have identical sets of arguments, return true.
+  * Return false.
 
 **Explanatory Text**
 
