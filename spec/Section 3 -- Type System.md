@@ -1753,7 +1753,12 @@ A GraphQL schema describes directives which are used to annotate various parts
 of a GraphQL document as an indicator that they should be evaluated differently
 by a validator, executor, or client tool such as a code generator.
 
-GraphQL implementations should provide the `@skip`, `@include`, `@defer` and `@stream` directives.
+GraphQL implementations should provide the `@skip` and `@include` directives. 
+
+GraphQL implementations are not required to implement the `@defer` and `@stream` 
+directives. If they are implemented, they must be implemented according to the
+specification. GraphQL implementations that do not support these directives must
+not make them available via introspection.
 
 GraphQL implementations that support the type system definition language must
 provide the `@deprecated` directive if representing deprecated portions of

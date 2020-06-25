@@ -141,6 +141,10 @@ ExecuteQuery(query, schema, variableValues, initialValue):
   * For each {payload} in {subsequentPayloads}:
     * If {payload} is a Deferred Fragment Record:
       * Yield the value from calling {ResolveDeferredFragmentRecord(payload, variableValues, subsequentPayloads)}.
+      * If {payload} is not the final payload in {subsequentPayloads}
+        * Add an entry to {payload} named `hasNext` with the value {true}.
+      * If {payload} is the final payload in {subsequentPayloads}
+        * Add an entry to {payload} named `hasNext` with the value {false}.
     * If {payload} is a Stream Record:
       * Yield ResolveStreamRecord(payload, variableValues, subsequentPayloads).
 
@@ -712,7 +716,7 @@ Note: It is common for {resolver} to be asynchronous due to relying on reading
 an underlying database or networked service to produce a value. This
 necessitates the rest of a GraphQL executor to handle an asynchronous
 execution flow. In addition, a commom implementation of {generator} is to leverage 
-asynchronos iterators or asynchronos generators provided by many programing languages.
+asynchronous iterators or asynchronous generators provided by many programing languages.
 
 ### Value Completion
 
