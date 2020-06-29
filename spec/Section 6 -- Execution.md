@@ -26,7 +26,7 @@ request is determined by the result of executing this operation according to the
 "Executing Operations” section below.
 
 ExecuteRequest(schema, document, operationName, variableValues, initialValue):
-  Note: the execution assumes implementing language support coroutines.
+  Note: the execution assumes implementing language supports coroutines.
   Alternatively, the socket can provide a write buffer pointer to allow {ExecuteRequest()}
   to directly write payloads into the buffer. 
   * Let {operation} be the result of {GetOperation(document, operationName)}.
@@ -337,7 +337,7 @@ response map.
 ExecuteSelectionSet(selectionSet, objectType, objectValue, variableValues, subsequentPayloads, parentPath):
 
   * If {subsequentPayloads} is not provided, initialize it to the empty set.
-  * If {parentPath} is not provided, initialize it to an emtpy list.
+  * If {parentPath} is not provided, initialize it to an empty list.
   * Let {groupedFieldSet} be the result of
     {CollectFields(objectType, objectValue, selectionSet, variableValues, subsequentPayloads, parentPath)}.
   * Initialize {resultMap} to an empty ordered map.
@@ -468,11 +468,11 @@ Before execution, the selection set is converted to a grouped field set by
 calling {CollectFields()}. Each entry in the grouped field set is a list of
 fields that share a response key (the alias if defined, otherwise the field
 name). This ensures all fields with the same response key included via
-referenced fragments are executed at the same time. A deferred seclection set's
-fields will not be included in the grouped field set. Rather, a record
-representing the deferred fragment and addition context will be stored in a
-list. The executor revisits and resume execution for the list of deferred 
-fragment records after the initial execution finishes.
+referenced fragments are executed at the same time. A deferred selection
+set's fields will not be included in the grouped field set. Rather, a record
+representing the deferred fragment and additional context will be stored in a
+list. The executor revisits and resumes execution for the list of deferred 
+fragment records after the initial execution is initiated.
  
 
 As an example, collecting the fields of this selection set would collect two
@@ -686,8 +686,8 @@ This is exposed via {ResolveFieldValue}, which produces a value for a given
 field on a type for a real value. In addition, {ResolveFieldGenerator} will be 
 exposed to produce an iterator for a field with `List` return type.
 The internal system may optionally define a generator function. In the case
-where the generator is not defined, the GraphQL executor provide a default generator.
-For example, a trivial generator that yield the entire list upon the first iteration.
+where the generator is not defined, the GraphQL executor provides a default generator.
+For example, a trivial generator that yields the entire list upon the first iteration.
 
 As an example, a {ResolveFieldValue} might accept the {objectType} `Person`, the {field}
 {"soulMate"}, and the {objectValue} representing John Lennon. It would be
@@ -695,7 +695,7 @@ expected to yield the value representing Yoko Ono.
 
 A {ResolveFieldGenerator} might accept the {objectType} `MusicBand`, the {field} 
 {"members"}, and the {objectValue} representing Beatles. It would be expected to yield
-a iterator of values representing, John Lennon, Paul, McCartney, Ringo Starr and 
+a iterator of values representing, John Lennon, Paul McCartney, Ringo Starr and 
 George Harrison.
 
 ResolveFieldValue(objectType, objectValue, fieldName, argumentValues):
@@ -705,7 +705,7 @@ ResolveFieldValue(objectType, objectValue, fieldName, argumentValues):
   
 ResolveFieldGenerator(objectType, objectValue, fieldName, argumentValues, initialCount):
   * If {objectType} provide an internal function {generatorResolver} for
-    generating partitially resolved valueof a list field named {fieldName}:
+    generating partitially resolved value of a list field named {fieldName}:
     * Let {generatorResolver} be the internal function.
     * Return the iterator from calling {generatorResolver}, providing
       {objectValue}, {argumentValues} and {initialCount}.
@@ -716,7 +716,7 @@ Note: It is common for {resolver} to be asynchronous due to relying on reading
 an underlying database or networked service to produce a value. This
 necessitates the rest of a GraphQL executor to handle an asynchronous
 execution flow. In addition, a commom implementation of {generator} is to leverage 
-asynchronous iterators or asynchronous generators provided by many programing languages.
+asynchronous iterators or asynchronous generators provided by many programming languages.
 
 ### Value Completion
 
@@ -769,8 +769,8 @@ CompleteValue(fieldType, fields, result, variableValues, subsequentPayloads, par
   * If {result} is {null} (or another internal value similar to {null} such as
     {undefined} or {NaN}), return {null}.
   * If {fieldType} is a List type:
-    * If {result} is a iterator:
-      * Let {field} be thte first entry in {fields}.
+    * If {result} is an iterator:
+      * Let {field} be the first entry in {fields}.
       * Let {innerType} be the inner type of {fieldType}.
       * Let {streamDirective} be the `@stream` directived provided on {field}.
       * Let {initialCount} be the value or variable provided to {streamDirective}'s {initialCount} argument.
@@ -784,7 +784,7 @@ CompleteValue(fieldType, fields, result, variableValues, subsequentPayloads, par
           * Let {streamRecord} be the result of calling {CreateStreamRecord(label, initialCount, result, remainingItems, initialCount, fields, innerType, parentPath)}
           * Append {streamRecord} to {subsequentPayloads}.
           * Let {result} be {initialItems}.
-          * Exit For each loop.
+          * Exit for each loop.
     * If {result} is not a collection of values, throw a field error.
     * Let {innerType} be the inner type of {fieldType}.
     * Return a list where each list item is the result of calling
