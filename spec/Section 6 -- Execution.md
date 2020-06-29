@@ -472,7 +472,9 @@ referenced fragments are executed at the same time. A deferred selection
 set's fields will not be included in the grouped field set. Rather, a record
 representing the deferred fragment and additional context will be stored in a
 list. The executor revisits and resumes execution for the list of deferred 
-fragment records after the initial execution is initiated.
+fragment records after the initial execution is initiated. This deferred
+execution would ‘re-execute’ fields with the same response key that were
+present in the grouped field set.
  
 
 As an example, collecting the fields of this selection set would collect two
