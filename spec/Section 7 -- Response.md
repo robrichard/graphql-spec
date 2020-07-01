@@ -23,23 +23,28 @@ with key `data`. The value of this entry is described in the "Data" section. If
 the operation failed before execution, due to a syntax error, missing
 information, or validation error, this entry must not be present.
 
+When the response of the GraphQL operation is an event stream, the first value
+will be the initial response. All subsequent values may contain `label` and 
+`path` entries. These two entries are used by clients to identify the the 
+`@defer` or `@stream` directive from the GraphQL operation that triggered this
+value to be returned by the event stream. The combination of these two entries
+must be unique across all values returned by the event stream. 
+
 If the response of the GraphQL operation is an event stream, each response map
 must contain an entry with key `hasNext`. The value of this entry is `true` for
 all but the last response in the stream. The value of this entry is `false` for 
 the last response of the stream. This entry is not required for GraphQL 
-operations that return a single response map.
+operations that return a single response map. 
+
+The GraphQL server may determine there are no more values in the event stream 
+after a previous value with `hasNext`: `true` has been emitted. In this case 
+the last value in the event stream should be a map without `data`, `label`, 
+and `path` entries, and a `hasNext` entry with a value of `false`.
 
 The response map may also contain an entry with key `extensions`. This entry,
 if set, must have a map as its value. This entry is reserved for implementors
 to extend the protocol however they see fit, and hence there are no additional
 restrictions on its contents.
-
-When the response of the GraphQL operation is an event stream, the first value
-will be the initial response. All subsequent values must contain `label` and 
-`path` entries. These two entries are used by clients to identify the the 
-`@defer` or `@stream` directive from the GraphQL operation that triggered this
-value to be returned by the event stream. The combination of these two entries
-must be unique across all values returned by the event stream.
 
 To ensure future changes to the protocol do not break existing servers and
 clients, the top level response map must not contain any entries other than the
@@ -250,7 +255,7 @@ When the `path` field is present on an "Error result", it indicates the response
 ## Label
 
 If the response of the GraphQL operation is an event stream, subsequent values
-will contain a string field `label`. This `label` is the same label passed to 
+may contain a string field `label`. This `label` is the same label passed to 
 the `@defer` or `@stream` directive that triggered this value. This allows 
 clients to identify which `@defer` or `@stream` directive is associated with
 this value.
