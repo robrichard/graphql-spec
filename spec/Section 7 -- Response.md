@@ -258,7 +258,8 @@ If the response of the GraphQL operation is an event stream, subsequent values
 may contain a string field `label`. This `label` is the same label passed to 
 the `@defer` or `@stream` directive that triggered this value. This allows 
 clients to identify which `@defer` or `@stream` directive is associated with
-this value.
+this value. `label` will not be present if the corresponding `@defer` or 
+`@stream` directive is not passed a `label` argument.
 
 ## Serialization Format
 
