@@ -1929,7 +1929,7 @@ type ExampleType {
 
 ### @defer
 ```graphql
-directive @defer(label: String!, if: Boolean) on FRAGMENT_SPREAD | INLINE_FRAGMENT
+directive @defer(label: String, if: Boolean) on FRAGMENT_SPREAD | INLINE_FRAGMENT
 ```
 The `@defer` directive may be provided for fragment spreads and inline fragments to 
 inform the executor to delay the execution of the current fragment to indicate 
@@ -1955,7 +1955,7 @@ fragment someFragment on User {
 
 ### @stream
 ```graphql
-directive @stream(label: String!, initialCount: Int!, if: Boolean) on FIELD
+directive @stream(label: String, initialCount: Int!, if: Boolean) on FIELD
 ```
 The `@stream` directive may be provided for a field of `List` type so that the 
 backend can leverage technology such as asynchronous iterators to provide a partial
