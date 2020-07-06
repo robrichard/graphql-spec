@@ -1928,9 +1928,11 @@ type ExampleType {
 ```
 
 ### @defer
+
 ```graphql
 directive @defer(label: String, if: Boolean) on FRAGMENT_SPREAD | INLINE_FRAGMENT
 ```
+
 The `@defer` directive may be provided for fragment spreads and inline fragments to 
 inform the executor to delay the execution of the current fragment to indicate 
 deprioritization of the current fragment. A query with `@defer` directive will cause
@@ -1954,13 +1956,16 @@ fragment someFragment on User {
 ```
 
 ### @stream
+
 ```graphql
 directive @stream(label: String, initialCount: Int!, if: Boolean) on FIELD
 ```
+
 The `@stream` directive may be provided for a field of `List` type so that the 
 backend can leverage technology such as asynchronous iterators to provide a partial
 list in the initial response, and additional list items in subsequent responses.
 `@include` and `@skip` take presedence over `@stream`.
+
 ```graphql example
 query myQuery($shouldDefer: Boolean) {
    user {
@@ -1969,5 +1974,4 @@ query myQuery($shouldDefer: Boolean) {
      }
    }
 }
-
 ```

@@ -578,6 +578,7 @@ DeferFragment(objectType, objectValue, fragmentSelectionSet, parentPath):
 
 
 #### Deferred Fragment Record
+
 **Formal Specification**
 Let {deferredFragment} be an inline fragment or fragment spread with `@defer` provided.
 Deferred Fragment Record is a structure containing: 
@@ -592,7 +593,7 @@ CreateDeferredFragmentRecord(label, objectType, objectValue, fragmentSelectionSe
   * Construct a deferred fragment record based on the parameters passed in.
 
 ResolveDeferredFragmentRecord(deferredFragmentRecord, variableValues, subsequentPayloads):
-  * Let {label, objectType, objectValue, fragmentSelectionSet, path} be the corresponding fields
+  * Let {label}, {objectType}, {objectValue}, {fragmentSelectionSet}, {path} be the corresponding fields
     in the deferred fragment record structure.
   * Let {payload} be the result of calling {ExecuteSelectionSet(fragmentSelectionSet, objectType, objectValue, variableValues, subsequentPayloads, path)}.
   * Add an entry to {payload} named `label` with the value {label}.
@@ -732,6 +733,7 @@ Unresolved items in the iterator will be stored in a stream record which the exe
 resumes to execute after the initial execution finishes.
 
 #### Stream Record
+
 **Formal Specification**
 Let {streamField} be a list field with a `@stream` directive provided.
 A Stream Record is a structure containing:
@@ -747,10 +749,10 @@ CreateStreamRecord(label, initialCount, iterator, resolvedItems, index, fields, 
 *  Construct a stream record based on the parameters passed in.
 
 ResolveStreamRecord(streamRecord, variableValues, subsequentPayloads):
-* Let {label, iterator, resolvedItems, index, path, fields, innerType} be the correspondent fields on 
-  the Stream Record structure.
-* Remove the first entry from {resolvedItem}, let the entry be {item}. If {resolvedItem} is empty,
-  retrieve more items from {iterator}:
+* Let {label}, {iterator}, {resolvedItems}, {index}, {path}, {fields},
+{innerType} be the correspondent fields on the Stream Record structure.
+* Remove the first entry from {resolvedItem}, let the entry be {item}. If 
+{resolvedItem} is empty, retrieve more items from {iterator}:
   * Append {index} to {path}.
   * Increment {index}.
   * Let {payload} be the result of calling CompleteValue(innerType, fields, item, variableValues, subsequentPayloads, path)}.
