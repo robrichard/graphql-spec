@@ -137,16 +137,18 @@ ExecuteQuery(query, schema, variableValues, initialValue):
     *normally* (allowing parallelization).
   * Let {errors} be any *field errors* produced while executing the
     selection set.
-  * Yield an unordered map containing {data} and {errors}.
-  * For each {payload} in {subsequentPayloads}:
-    * If {payload} is a Deferred Fragment Record:
-      * Yield the value from calling {ResolveDeferredFragmentRecord(payload, variableValues, subsequentPayloads)}.
-      * If {payload} is not the final payload in {subsequentPayloads}
-        * Add an entry to {payload} named `hasNext` with the value {true}.
-      * If {payload} is the final payload in {subsequentPayloads}
-        * Add an entry to {payload} named `hasNext` with the value {false}.
-    * If {payload} is a Stream Record:
-      * Yield ResolveStreamRecord(payload, variableValues, subsequentPayloads).
+  * Yield an unordered map containing {data}, {errors} and {hasNext} if 
+    {subsequentPayloads} is non-empty.
+  * For each {record} in {subsequentPayloads}:
+    * If {record} is a Deferred Fragment Record:
+      * Let {payload} be the result of running {ResolveDeferredFragmentRecord(record, variableValues, subsequentPayloads)}.
+    * If {record} is a Stream Record:
+      * Let {payload} be the result of running ResolveStreamRecord(record, variableValues, subsequentPayloads).
+    * If {record} is not the final element in {subsequentPayloads}
+      * Add an entry to {payload} named `hasNext` with the value {true}.
+    * If {record} is the final element in {subsequentPayloads}
+      * Add an entry to {payload} named `hasNext` with the value {false}.
+    * Yield {payload}
 
 ### Mutation
 
@@ -580,13 +582,13 @@ DeferFragment(objectType, objectValue, fragmentSelectionSet, parentPath):
 #### Deferred Fragment Record
 
 **Formal Specification**
-Let {deferredFragment} be an inline fragment or fragment spread with `@defer` provided.
+Let {deferredFragmentRecord} be an inline fragment or fragment spread with `@defer` provided.
 Deferred Fragment Record is a structure containing: 
 * {label} value derived from the `@defer` directive.
-* {objectType} of the {deferredFragment}.
-* {objectValue} of the {deferredFragment}.
-* {fragmentSelectionSet}: the top level selection set of {deferredFragment}.
-* {path} a list of field names and indices from root to {deferredFragment}.
+* {objectType} of the {deferredFragmentRecord}.
+* {objectValue} of the {deferredFragmentRecord}.
+* {fragmentSelectionSet}: the top level selection set of {deferredFragmentRecord}.
+* {path} a list of field names and indices from root to {deferredFragmentRecord}.
 
 CreateDeferredFragmentRecord(label, objectType, objectValue, fragmentSelectionSet, path):
   * If {path} is not provided, initialize it to an empty list.
@@ -749,18 +751,18 @@ CreateStreamRecord(label, initialCount, iterator, resolvedItems, index, fields, 
 *  Construct a stream record based on the parameters passed in.
 
 ResolveStreamRecord(streamRecord, variableValues, subsequentPayloads):
-* Let {label}, {iterator}, {resolvedItems}, {index}, {path}, {fields},
-{innerType} be the correspondent fields on the Stream Record structure.
-* Remove the first entry from {resolvedItem}, let the entry be {item}. If 
-{resolvedItem} is empty, retrieve more items from {iterator}:
-  * Append {index} to {path}.
-  * Increment {index}.
-  * Let {payload} be the result of calling CompleteValue(innerType, fields, item, variableValues, subsequentPayloads, path)}.
-  * Add an entry to {payload} named `label` with the value {label}.
-  * Add an entry to {payload} named `path` with the value {path}.
-  * If {resolveItem} is not empty or {iterator} does not reach the end:
-    * Append {streamRecord} to {subsequentPayloads}.
-  * Return {payload}.
+  * Let {label}, {iterator}, {resolvedItems}, {index}, {path}, {fields},
+    {innerType} be the correspondent fields on the Stream Record structure.
+  * Remove the first entry from {resolvedItem}, let the entry be {item}. If 
+    {resolvedItem} is empty, retrieve more items from {iterator}:
+    * Append {index} to {path}.
+    * Increment {index}.
+    * Let {payload} be the result of calling CompleteValue(innerType, fields, item, variableValues, subsequentPayloads, path)}.
+    * Add an entry to {payload} named `label` with the value {label}.
+    * Add an entry to {payload} named `path` with the value {path}.
+    * If {resolveItem} is not empty or {iterator} does not reach the end:
+      * Append {streamRecord} to {subsequentPayloads}.
+    * Return {payload}.
  
 
 CompleteValue(fieldType, fields, result, variableValues, subsequentPayloads, parentPath):
