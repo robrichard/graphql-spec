@@ -760,7 +760,7 @@ expected to yield the value representing Yoko Ono.
 
 A {ResolveFieldGenerator} might accept the {objectType} `MusicBand`, the {field} 
 {"members"}, and the {objectValue} representing Beatles. It would be expected to yield
-a iterator of values representing, John Lennon, Paul McCartney, Ringo Starr and 
+a iterator of values representing John Lennon, Paul McCartney, Ringo Starr and 
 George Harrison.
 
 ResolveFieldValue(objectType, objectValue, fieldName, argumentValues):
@@ -780,7 +780,7 @@ ResolveFieldGenerator(objectType, objectValue, fieldName, argumentValues, initia
 Note: It is common for {resolver} to be asynchronous due to relying on reading
 an underlying database or networked service to produce a value. This
 necessitates the rest of a GraphQL executor to handle an asynchronous
-execution flow. In addition, a commom implementation of {generator} is to leverage 
+execution flow. In addition, a common implementation of {generator} is to leverage 
 asynchronous iterators or asynchronous generators provided by many programming languages.
 
 ### Value Completion
@@ -789,7 +789,7 @@ After resolving the value for a field, it is completed by ensuring it adheres
 to the expected return type. If the return type is another Object type, then
 the field execution process continues recursively. In the case where a value
 returned for a list type field is an iterator due to `@stream` specified on the 
-field, value completition iterates over the iterator until the number of items
+field, value completion iterates over the iterator until the number of items
 yield by the iterator satisfies `initialCount` specified on the `@stream` directive.
 Unresolved items in the iterator will be stored in a stream record which the executor
 resumes to execute after the initial execution finishes.
