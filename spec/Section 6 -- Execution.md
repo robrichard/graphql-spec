@@ -763,7 +763,7 @@ expected to yield the value representing Yoko Ono.
 
 A {ResolveFieldGenerator} might accept the {objectType} `MusicBand`, the {field} 
 {"members"}, and the {objectValue} representing Beatles. It would be expected to yield
-a iterator of values representing, John Lennon, Paul McCartney, Ringo Starr and 
+a iterator of values representing John Lennon, Paul McCartney, Ringo Starr and 
 George Harrison.
 
 ResolveFieldValue(objectType, objectValue, fieldName, argumentValues):
