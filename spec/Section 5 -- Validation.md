@@ -11,10 +11,10 @@ containing validation errors, so execution should only occur for valid requests.
 
 Typically validation is performed in the context of a request immediately
 before execution, however a GraphQL service may execute a request without
-explicitly validating it if that exact same request is known to have been
-validated before. For example: the request may be validated during development,
-provided it does not later change, or a service may validate a request once and
-memoize the result to avoid validating the same request again in the future.
+explicitly validating it if that exact same document is known to have been
+validated before. For example: the document may be validated during development,
+provided it does not later change, or a service may validate a document once and
+memoize the result to avoid validating the same document again in the future.
 Any client-side or development-time tool should report validation errors and not
 allow the formulation or execution of requests known to be invalid at that given
 point in time.
