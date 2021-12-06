@@ -844,6 +844,7 @@ CompleteValue(fieldType, fields, result, variableValues, subsequentPayloads, par
       * Let {innerType} be the inner type of {fieldType}.
       * Let {streamDirective} be the `@stream` directive provided on {field}.
       * Let {initialCount} be the value or variable provided to {streamDirective}'s {initialCount} argument.
+      * If {initialCount} is less than zero, raise a field error.
       * Let {label} be the value or variable provided to {streamDirective}'s {label} argument.
       * Let {resolvedItems} be an empty list
       * For each {members} in {result}:
