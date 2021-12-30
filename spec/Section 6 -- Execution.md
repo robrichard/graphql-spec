@@ -370,13 +370,13 @@ YieldSubsequentPayloads(subsequentPayloads):
     * Return.
   * Let {record} be the first item in {subsequentPayloads} with a completed {dataExecution}.
     * Remove {record} from {subsequentPayloads}.
-    * Let {payload} be the completed result returned by {dataExecution}.
-    * If {payload} is {null}:
+    * If {isCompletedIterator} on {record} is {true}:
       * If {subsequentPayloads} is empty:
         * Yield a map containing a field `hasNext` with the value {false}.
         * Return.
       * If {subsequentPayloads} is not empty:
         * Continue to the next record in {subsequentPayloads}.
+    * Let {payload} be the completed result returned by {dataExecution}.
     * If {record} is not the final element in {subsequentPayloads}:
       * Add an entry to {payload} named `hasNext` with the value {true}.
     * If {record} is the final element in {subsequentPayloads}:
@@ -637,6 +637,8 @@ An Async Payload Record is either a Deferred Fragment Record or a Stream Record.
   * {label}: value derived from the corresponding `@defer` or `@stream` directive.
   * {path}: a list of field names and indices from root to the location of the corresponding `@defer` or `@stream` directive.
   * {iterator}: The underlying iterator if created from a `@stream` directive.
+  * {isCompletedIterator}: a boolean indicating the payload record was 
+  generated from an iterator that has completed.
   * {errors}: a list of field errors encountered during execution.
   * {dataExecution}: A result that can notify when the corresponding execution has completed. 
 
@@ -799,6 +801,7 @@ ExecuteStreamField(label, iterator, index, fields, innerType, path streamRecord,
   * Let {dataExecution} be the asynchronous future value of:
     * Wait for the next item from {iterator}.
     * If an item is not retrieved because {iterator} has completed:
+      * Set {isCompletedIterator} to {true} on {streamRecord}.
       * Return {null}.
     * Let {payload} be an unordered map.
     * Let {item} be the item retrieved from {iterator}.
