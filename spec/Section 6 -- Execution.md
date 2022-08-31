@@ -366,6 +366,37 @@ Unsubscribe(responseStream):
 
 - Cancel {responseStream}
 
+## Filter Subsequent Payloads
+
+This function is used to remove payloads whose path points to a location that
+has been nulled as a result of bubbling from a non-null error in a previous
+payload.
+
+FilterSubsequentPayloads(subsequentPayloads, result, originalPath):
+
+- If {originalPath} is not provided, initialize it to an empty list.
+- For each {subsequentPayload} in {subsequentPayloads}:
+  - Let {payloadPath} be the path on {subsequentPayload}.
+  - If {subsequentPayload} is a Stream Record:
+    - Remove the last index from {payloadPath}.
+  - Initialize {index} to zero.
+  - Initialize {currentResult} to {result}.
+  - Loop:
+    - If {currentResult} is {null}:
+      - If {record} contains {iterator}:
+        - Send a termination signal to {iterator}.
+      - Remove {subsequentPayload} from {subsequentPayloads}.
+    - If {index} is greater than or equal to the length of {payloadPath}.
+      - Continue to the next payload in {subsequentPayloads}.
+    - If {index} is greater than or equal to the length of {originalPath}.
+      - Let {pathElement} be the element in {payloadPath} at {index}.
+      - Set {currentResult} to the value of {currentResult} indexed at
+        {pathElement}.
+    - Otherwise, if the elements at {index} of {originalPath} and {payloadPath}
+      are not equivalent:
+      - Continue to the next payload in {subsequentPayloads}.
+    - Increment {index} by one.
+
 ## Yield Subsequent Payloads
 
 If an operation contains subsequent payload records resulting from `@stream` or
@@ -374,6 +405,8 @@ payloads should be processed.
 
 YieldSubsequentPayloads(initialResponse, subsequentPayloads):
 
+- If {initialResponse} contains a non-empty {errors} list:
+  - Call {FilterSubsequentPayloads(subsequentPayloads, initialResponse)}
 - Let {initialRecords} be any items in {subsequentPayloads} with a completed
   {dataExecution}.
 - Initialize {initialIncremental} to an empty list.
@@ -382,6 +415,16 @@ YieldSubsequentPayloads(initialResponse, subsequentPayloads):
   - If {isCompletedIterator} on {record} is {true}:
     - Continue to the next record in {records}.
   - Let {payload} be the completed result returned by {dataExecution}.
+  - If {record} is a Stream Record:
+    - Let {path} be the corresponding field on {payload}, with the final index
+      removed.
+    - Let {items} and {errors} be the corresponding field on {payload}.
+    - If {errors} is a non-empty list:
+      - Call {FilterSubsequentPayloads(subsequentPayloads, items, path)}
+  - Otherwise, if {record} is a Deferred Fragment record:
+    - Let {data}, {path}, and {errors} be the corresponding fields on {payload}.
+    - If {errors} is a non-empty list:
+      - Call {FilterSubsequentPayloads(subsequentPayloads, data, path)}
   - Append {payload} to {initialIncremental}.
 - If {initialIncremental} is not empty:
   - Add an entry to {initialResponse} named `incremental` containing the value
@@ -404,6 +447,17 @@ YieldSubsequentPayloads(initialResponse, subsequentPayloads):
     - If {isCompletedIterator} on {record} is {true}:
       - Continue to the next record in {records}.
     - Let {payload} be the completed result returned by {dataExecution}.
+    - If {record} is a Stream Record:
+      - Let {path} be the corresponding field on {payload}, with the final index
+        removed.
+      - Let {items} and {errors} be the corresponding field on {payload}.
+      - If {errors} is a non-empty list:
+        - Call {FilterSubsequentPayloads(subsequentPayloads, items, path)}
+    - Otherwise, if {record} is a Deferred Fragment record:
+      - Let {data}, {path}, and {errors} be the corresponding fields on
+        {payload}.
+      - If {errors} is a non-empty list:
+        - Call {FilterSubsequentPayloads(subsequentPayloads, data, path)}
     - Append {payload} to the {incremental} entry on {subsequentResponse}.
   - If {subsequentPayloads} is empty:
     - Add an entry to {subsequentResponse} named `hasNext` with the value
