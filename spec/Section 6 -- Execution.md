@@ -921,9 +921,10 @@ ResolveFieldValue(objectType, objectValue, fieldName, argumentValues):
 Note: It is common for {resolver} to be asynchronous due to relying on reading
 an underlying database or networked service to produce a value. This
 necessitates the rest of a GraphQL executor to handle an asynchronous execution
-flow. In addition, an implementation for collections may leverage
-asynchronous iterators or asynchronous generators provided by many programming
-languages. This may be particularly helpful when used in conjunction with the `@stream` directive.
+flow. In addition, an implementation for collections may leverage asynchronous
+iterators or asynchronous generators provided by many programming languages.
+This may be particularly helpful when used in conjunction with the `@stream`
+directive.
 
 ### Value Completion
 
@@ -989,8 +990,8 @@ subsequentPayloads, asyncRecord):
   - Let {field} be the first entry in {fields}.
   - Let {innerType} be the inner type of {fieldType}.
   - If {field} provides the directive `@stream` and its {if} argument is not
-    {false} and is not a variable in {variableValues} with the value {false}
-    and {innerType} is the outermost return type of the list type defined for
+    {false} and is not a variable in {variableValues} with the value {false} and
+    {innerType} is the outermost return type of the list type defined for
     {field}:
     - Let {streamDirective} be that directive.
     - Let {initialCount} be the value or variable provided to
