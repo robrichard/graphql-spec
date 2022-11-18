@@ -1014,7 +1014,8 @@ subsequentPayloads, asyncRecord):
         path, asyncRecord, subsequentPayloads)}.
       - Return {items}.
     - Otherwise:
-      - Retrieve the next item from {result} via the {iterator}.
+      - Wait for the next item from {result} via the {iterator}.
+      - If an item is not retrieved because of an error, raise a _field error_.
       - Let {resultItem} be the item retrieved from {result}.
       - Let {itemPath} be {path} with {index} appended.
       - Let {resolvedItem} be the result of calling {CompleteValue(innerType,
